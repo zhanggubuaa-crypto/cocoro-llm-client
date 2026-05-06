@@ -2,7 +2,10 @@
 
 cocoro-llm-server に接続するためのクライアント設定ガイドです。
 
-[ cocoro-llm-server の詳細](../cocoro-llm-server/CLAUDE.md)
+| リポジトリ | 役割 |
+|---|---|
+| [cocoro-llm-server](https://github.com/mdl-systems/cocoro-llm-server) | LLM推論エンジン（サーバー側） |
+| cocoro-llm-client | クライアント設定（opencode.json等） |
 
 ## クイックスタート
 

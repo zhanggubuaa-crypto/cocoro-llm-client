@@ -2,6 +2,7 @@
 # cocoro-llm-server との接続設定を行います
 
 Write-Host "=== cocoro-llm-client Setup ===" -ForegroundColor Cyan
+Write-Host "Connecting to cocoro-llm-server at 192.168.50.112:4000" -ForegroundColor Yellow
 
 # 設定ファイルのコピー
 Write-Host "Copying opencode.json.sample to opencode.json..." -ForegroundColor Yellow

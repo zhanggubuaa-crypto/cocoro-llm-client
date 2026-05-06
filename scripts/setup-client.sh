@@ -5,6 +5,7 @@
 set -e
 
 echo "=== cocoro-llm-client Setup ===" >&2
+echo "Connecting to cocoro-llm-server at 192.168.50.112:4000" >&2
 
 # 設定ファイルのコピー
 echo "Copying opencode.json.sample to opencode.json..." >&2
