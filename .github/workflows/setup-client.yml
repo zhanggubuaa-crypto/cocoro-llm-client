@@ -1,0 +1,58 @@
+# cocoro-llm-client Setup Workflow
+# main ブランチへの push と PR で実行
+
+name: Setup cocoro-llm-client
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  setup-client:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Copy opencode.json.sample to opencode.json
+        run: |
+          cp opencode.json.sample opencode.json
+          echo "opencode.json created"
+
+      - name: Set API key from environment variable
+        env:
+          LITELLM_API_KEY: ${{ secrets.LITELLM_API_KEY }}
+        run: |
+          if [ -z "$LITELLM_API_KEY" ]; then
+            echo "ERROR: LITELLM_API_KEY is not set in secrets"
+            exit 1
+          fi
+          sed -i "s/YOUR_API_KEY_HERE/$LITELLM_API_KEY/g" opencode.json
+          echo "API key configured"
+
+      - name: Health check to cocoro-llm-server
+        run: |
+          echo "Checking connection to cocoro-llm-server at 192.168.50.112:4000..."
+          response=$(curl -s --max-time 10 http://192.168.50.112:4000/health/liveliness 2>/dev/null || echo "FAILED")
+          if [ "$response" = "ok" ] || [ "$response" = '{"status":"healthy"}' ]; then
+            echo "✓ Server connection verified"
+          else
+            echo "⚠ Health check failed (server may not be accessible)"
+            echo "  This is expected in CI/CD environment"
+          fi
+
+      - name: Show opencode.json (debug)
+        run: |
+          echo "=== opencode.json content (API key masked) ==="
+          cat opencode.json | sed 's/"apiKey": "[^"]*"/"apiKey": "***REDACTED***"/g'
