@@ -16,12 +16,35 @@
 
 ---
 
+## 前提条件：ネットワーク接続
+
+クライアントPCがサーバーPCに**ネットワーク的に到達できる**必要があります。以下のいずれかの方法で接続してください。
+
+### 推奨：Tailscale 経由（場所を問わず使える）
+
+[Tailscale](https://tailscale.com/) をクライアントPCとサーバーPCの両方にインストールし、**同じアカウントでログイン**します。これだけで両PCが仮想的に同じネットワーク上に置かれ、外出先や別のWiFiからでも接続可能になります。
+
+```powershell
+# Windows: https://tailscale.com/download からインストール
+# Linux/macOS:
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+```
+
+サーバー側でサブネットルーターを有効にしているか、サーバーPCの **Tailscale IP**（`100.x.x.x`、`tailscale ip -4` で確認）を使います。
+
+### 代替：同じLAN（家庭・社内ネットワーク）
+
+クライアントPCとサーバーPCが**同じWiFi/同じルーター下**にある場合は、追加設定なしで接続できます。サーバーPCのLAN IP（例: `192.168.x.x`）をそのまま使ってください。
+
+---
+
 ## 必要なもの（共通）
 
 | 品目 | 内容 |
 |---|---|
-| サーバーIPアドレス | サーバーPCで `bash scripts/show_connection_info.sh` を実行して確認 |
-| APIキー | 同上（LITELLM_MASTER_KEY の値） |
+| サーバーIPアドレス | Tailscale IP（`100.x.x.x`）または LAN IP（`192.168.x.x`） |
+| APIキー | サーバーPCで `bash scripts/show_connection_info.sh` を実行して確認（LITELLM_MASTER_KEY の値） |
 
 ---
 

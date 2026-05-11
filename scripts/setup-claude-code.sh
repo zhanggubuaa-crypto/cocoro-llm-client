@@ -29,7 +29,9 @@ fi
 echo "" >&2
 echo "Step 2: サーバー接続設定" >&2
 echo "  cocoro-llm-server のIPアドレスを入力してください" >&2
-echo "  (サーバーPCで scripts/show_connection_info.sh を実行して確認できます)" >&2
+echo "  - 同じLAN: サーバーPCのLAN IP (例: 192.168.x.x)" >&2
+echo "  - Tailscale 経由: サーバーPCの Tailscale IP (例: 100.x.x.x)" >&2
+echo "  サーバーPCで scripts/show_connection_info.sh を実行すれば一覧表示されます" >&2
 read -p "  Server IP: " server_ip
 if [ -z "$server_ip" ]; then
     echo "  Server IP は必須です" >&2

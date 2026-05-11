@@ -29,7 +29,9 @@ if ($claudeCmd) {
 Write-Host ""
 Write-Host "Step 2: サーバー接続設定" -ForegroundColor Yellow
 Write-Host "  cocoro-llm-server のIPアドレスを入力してください"
-Write-Host "  (サーバーPCで scripts/show_connection_info.sh を実行して確認できます)"
+Write-Host "  - 同じLAN: サーバーPCのLAN IP (例: 192.168.x.x)"
+Write-Host "  - Tailscale 経由: サーバーPCの Tailscale IP (例: 100.x.x.x)"
+Write-Host "  サーバーPCで scripts/show_connection_info.sh を実行すれば一覧表示されます"
 $serverIp = Read-Host "  Server IP"
 if ([string]::IsNullOrWhiteSpace($serverIp)) {
     Write-Host "  Server IP は必須です" -ForegroundColor Red
