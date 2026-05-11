@@ -1,31 +1,30 @@
-#!/bin/bash
+﻿#!/bin/bash
 # API Test Script for cocoro-llm-client
-# cocoro-llm-server との接続テストを行います
-
+# cocoro-llm-server 縺ｨ縺ｮ謗･邯壹ユ繧ｹ繝医ｒ陦後＞縺ｾ縺・
 set -e
 
 API_KEY="${LITELLM_API_KEY:-litellm}"
-BASE_URL="http://192.168.50.112:4000/v1"
+BASE_URL="http://<SERVER_IP>:4000/v1"
 
 echo "=== Testing cocoro-llm-server Connection ===" >&2
 
-# 1. ヘルスチェック
+# 1. 繝倥Ν繧ｹ繝√ぉ繝・け
 echo
 echo "1. Health Check..." >&2
 response=$(curl -s "${BASE_URL}/health/liveliness")
 if [ "$response" = "ok" ]; then
-    echo "✓ Health check passed" >&2
+    echo "笨・Health check passed" >&2
 else
-    echo "✗ Health check failed: $response" >&2
+    echo "笨・Health check failed: $response" >&2
 fi
 
-# 2. モデル一覧
+# 2. 繝｢繝・Ν荳隕ｧ
 echo
 echo "2. List Models..." >&2
 models=$(curl -s "${BASE_URL}/models" | jq -r '.data[].id' 2>/dev/null || echo "Failed")
 echo "$models" >&2
 
-# 3. 推論テスト (Qwen3 Coder)
+# 3. 謗ｨ隲悶ユ繧ｹ繝・(Qwen3 Coder)
 echo
 echo "3. Test Qwen3 Coder..." >&2
 response=$(curl -s -X POST "${BASE_URL}/chat/completions" \
@@ -38,12 +37,12 @@ response=$(curl -s -X POST "${BASE_URL}/chat/completions" \
     }' 2>/dev/null || echo "Failed")
 
 if [[ "$response" == *"error"* ]]; then
-    echo "✗ Qwen3 Coder test failed: $response" >&2
+    echo "笨・Qwen3 Coder test failed: $response" >&2
 else
-    echo "✓ Qwen3 Coder test passed" >&2
+    echo "笨・Qwen3 Coder test passed" >&2
 fi
 
-# 4. 推論テスト (Claude Sonnet)
+# 4. 謗ｨ隲悶ユ繧ｹ繝・(Claude Sonnet)
 echo
 echo "4. Test Claude Sonnet..." >&2
 response=$(curl -s -X POST "${BASE_URL}/chat/completions" \
@@ -56,9 +55,9 @@ response=$(curl -s -X POST "${BASE_URL}/chat/completions" \
     }' 2>/dev/null || echo "Failed")
 
 if [[ "$response" == *"error"* ]]; then
-    echo "✗ Claude Sonnet test failed: $response" >&2
+    echo "笨・Claude Sonnet test failed: $response" >&2
 else
-    echo "✓ Claude Sonnet test passed" >&2
+    echo "笨・Claude Sonnet test passed" >&2
 fi
 
 echo

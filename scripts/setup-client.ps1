@@ -1,59 +1,76 @@
-# cocoro-llm-client Setup Script (Windows PowerShell)
-# cocoro-llm-server との接続設定を行います
+# cocoro-llm-client Setup Script (Windows PowerShell / OpenCode)
+# opencode.json を生成して cocoro-llm-server (ローカルLLM) に接続します。
 
-Write-Host "=== cocoro-llm-client Setup ===" -ForegroundColor Cyan
-Write-Host "Connecting to cocoro-llm-server at 192.168.50.112:4000" -ForegroundColor Yellow
+$ErrorActionPreference = "Stop"
 
-# 設定ファイルのコピー
-Write-Host "Copying opencode.json.sample to opencode.json..." -ForegroundColor Yellow
-Copy-Item -Path "opencode.json.sample" -Destination "opencode.json" -Force
-if ($?) {
-    Write-Host "✓ opencode.json created" -ForegroundColor Green
-} else {
-    Write-Host "✗ Failed to copy opencode.json" -ForegroundColor Red
+Write-Host "=== OpenCode Setup ===" -ForegroundColor Cyan
+Write-Host ""
+
+# ──────────────────────────────────────────────────────────────
+# Step 1: サーバーIPの入力
+# ──────────────────────────────────────────────────────────────
+Write-Host "Step 1: サーバー接続設定" -ForegroundColor Yellow
+Write-Host "  cocoro-llm-server のIPアドレスを入力してください"
+Write-Host "  (サーバーPCで scripts/show_connection_info.sh を実行して確認できます)"
+$serverIp = Read-Host "  Server IP"
+if ([string]::IsNullOrWhiteSpace($serverIp)) {
+    Write-Host "  Server IP は必須です" -ForegroundColor Red
     exit 1
 }
 
-# APIキーの入力
-Write-Host "`nPlease enter your LITELLM API Key:" -ForegroundColor Yellow
-$apiKey = Read-Host "API Key (LITELLM_MASTER_KEY)"
+$healthUrl = "http://${serverIp}:4000/health/liveliness"
 
+# ──────────────────────────────────────────────────────────────
+# Step 2: APIキーの入力
+# ──────────────────────────────────────────────────────────────
+Write-Host ""
+$apiKey = Read-Host "  API Key (LITELLM_MASTER_KEY)"
 if ([string]::IsNullOrWhiteSpace($apiKey)) {
-    Write-Host "✗ API Key is required" -ForegroundColor Red
+    Write-Host "  API Key は必須です" -ForegroundColor Red
     exit 1
 }
 
-# APIキーの置換
-Write-Host "Updating opencode.json with API key..." -ForegroundColor Yellow
-$content = Get-Content -Path "opencode.json" -Raw
-$content = $content -replace '"apiKey": "YOUR_API_KEY_HERE"', "`"apiKey`": `"$apiKey`""
-Set-Content -Path "opencode.json" -Value $content -NoNewline
+# ──────────────────────────────────────────────────────────────
+# Step 3: opencode.json を生成
+# ──────────────────────────────────────────────────────────────
+Write-Host ""
+Write-Host "Step 2: opencode.json を生成しています..." -ForegroundColor Yellow
 
-if ($?) {
-    Write-Host "✓ API key configured" -ForegroundColor Green
-} else {
-    Write-Host "✗ Failed to update API key" -ForegroundColor Red
+$samplePath = Join-Path $PSScriptRoot "..\opencode.json.sample"
+$outputPath = Join-Path $PSScriptRoot "..\opencode.json"
+
+if (-not (Test-Path $samplePath)) {
+    Write-Host "  opencode.json.sample が見つかりません: $samplePath" -ForegroundColor Red
     exit 1
 }
 
-# ヘルスチェック
-Write-Host "`nChecking connection to cocoro-llm-server..." -ForegroundColor Yellow
-$serverUrl = "http://192.168.50.112:4000/health/liveliness"
+$content = [System.IO.File]::ReadAllText($samplePath, [System.Text.Encoding]::UTF8)
+$content = $content -replace "YOUR_SERVER_IP", $serverIp
+$content = $content -replace "YOUR_API_KEY_HERE", $apiKey
+[System.IO.File]::WriteAllText($outputPath, $content, [System.Text.Encoding]::UTF8)
+
+Write-Host "  opencode.json を書き込みました: $outputPath" -ForegroundColor Green
+
+# ──────────────────────────────────────────────────────────────
+# Step 4: サーバーへの接続確認
+# ──────────────────────────────────────────────────────────────
+Write-Host ""
+Write-Host "Step 3: サーバーへの接続を確認しています..." -ForegroundColor Yellow
 try {
-    $response = Invoke-RestMethod -Uri $serverUrl -Method Get -TimeoutSec 10
-    if ($response -eq "ok") {
-        Write-Host "✓ Server connection verified" -ForegroundColor Green
-    } else {
-        Write-Host "✗ Unexpected response: $response" -ForegroundColor Red
-        exit 1
-    }
+    $response = Invoke-RestMethod -Uri $healthUrl -Method Get -TimeoutSec 10
+    Write-Host "  サーバー接続成功" -ForegroundColor Green
 } catch {
-    Write-Host "✗ Connection failed: $_" -ForegroundColor Red
-    Write-Host "  Ensure cocoro-llm-server is running at http://192.168.50.112:4000" -ForegroundColor Yellow
-    exit 1
+    Write-Host "  サーバーに接続できませんでした" -ForegroundColor Yellow
+    Write-Host "  サーバーが起動しているか確認してください: $healthUrl" -ForegroundColor Yellow
 }
 
-Write-Host "`n=== Setup Complete ===" -ForegroundColor Cyan
-Write-Host "Next steps:" -ForegroundColor Cyan
-Write-Host "  1. Review opencode.json settings" -ForegroundColor Cyan
-Write-Host "  2. Run `opencode init` to initialize" -ForegroundColor Cyan
+# ──────────────────────────────────────────────────────────────
+# 完了
+# ──────────────────────────────────────────────────────────────
+Write-Host ""
+Write-Host "=== セットアップ完了 ===" -ForegroundColor Cyan
+Write-Host "次のステップ:" -ForegroundColor Cyan
+Write-Host "  1. opencode.json の設定を確認する" -ForegroundColor White
+Write-Host "  2. opencode を起動する" -ForegroundColor White
+Write-Host ""
+Write-Host "接続先: http://${serverIp}:4000 (ローカルLLM)" -ForegroundColor Cyan
