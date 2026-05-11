@@ -122,6 +122,20 @@ OpenCode は `opencode.json` の `model` を編集、Claude Code は `settings.j
 
 ---
 
+## その他の OpenAI 互換クライアント
+
+サーバーは `:4000` で **OpenAI 互換 API** を提供しているため、Cursor / Continue / Cline / OpenHands などほとんどのクライアントから接続できます。各クライアントの設定で以下を指定するだけです:
+
+| 項目 | 値 |
+|---|---|
+| API Base URL | `http://<SERVER_IP>:4000/v1` |
+| API Key | `<LITELLM_MASTER_KEY の値>` |
+| Model | `qwen3-coder` / `smart-coder` / `claude-sonnet` |
+
+> Claude Code だけは Anthropic API 形式なので、`:4001`（anthropic-proxy）経由になります。
+
+---
+
 ## 詳細ドキュメント
 
 - [docs/CLIENT_SETUP.md](docs/CLIENT_SETUP.md) — セットアップ手順の詳細
