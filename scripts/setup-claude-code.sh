@@ -2,6 +2,9 @@
 # cocoro-llm-client Setup Script - Claude Code (Linux/macOS/WSL)
 # Claude Code を cocoro-llm-server (ローカルLLM) に接続します。
 # ~/.claude/settings.json に env を書き込むため、どのフォルダでも有効になります。
+#
+# 非対話モード（Antigravity / CI 向け）:
+#   SERVER_IP=192.168.x.x API_KEY=sk-xxx ./scripts/setup-claude-code.sh
 
 set -e
 
@@ -24,31 +27,43 @@ else
 fi
 
 # ──────────────────────────────────────────────────────────────
-# Step 2: サーバーIPの入力
+# Step 2: サーバーIPの入力（環境変数 SERVER_IP があればスキップ）
 # ──────────────────────────────────────────────────────────────
 echo "" >&2
 echo "Step 2: サーバー接続設定" >&2
-echo "  cocoro-llm-server のIPアドレスを入力してください" >&2
-echo "  - 同じLAN: サーバーPCのLAN IP (例: 192.168.x.x)" >&2
-echo "  - Tailscale 経由: サーバーPCの Tailscale IP (例: 100.x.x.x)" >&2
-echo "  サーバーPCで scripts/show_connection_info.sh を実行すれば一覧表示されます" >&2
-read -p "  Server IP: " server_ip
-if [ -z "$server_ip" ]; then
-    echo "  Server IP は必須です" >&2
-    exit 1
+
+if [ -n "${SERVER_IP:-}" ]; then
+    server_ip="$SERVER_IP"
+    echo "  ✓ Server IP (環境変数): $server_ip" >&2
+else
+    echo "  cocoro-llm-server のIPアドレスを入力してください" >&2
+    echo "  - 同じLAN: サーバーPCのLAN IP (例: 192.168.x.x)" >&2
+    echo "  - Tailscale 経由: サーバーPCの Tailscale IP (例: 100.x.x.x)" >&2
+    echo "  サーバーPCで scripts/show_connection_info.sh を実行すれば一覧表示されます" >&2
+    read -p "  Server IP: " server_ip
+    if [ -z "$server_ip" ]; then
+        echo "  Server IP は必須です" >&2
+        exit 1
+    fi
 fi
 
 proxy_url="http://${server_ip}:4001"
 health_url="http://${server_ip}:4000/health/liveliness"
 
 # ──────────────────────────────────────────────────────────────
-# Step 3: APIキーの入力
+# Step 3: APIキーの入力（環境変数 API_KEY があればスキップ）
 # ──────────────────────────────────────────────────────────────
 echo "" >&2
-read -p "  API Key (LITELLM_MASTER_KEY): " api_key
-if [ -z "$api_key" ]; then
-    echo "  API Key は必須です" >&2
-    exit 1
+
+if [ -n "${API_KEY:-}" ]; then
+    api_key="$API_KEY"
+    echo "  ✓ API Key (環境変数): ****${api_key: -4}" >&2
+else
+    read -p "  API Key (LITELLM_MASTER_KEY): " api_key
+    if [ -z "$api_key" ]; then
+        echo "  API Key は必須です" >&2
+        exit 1
+    fi
 fi
 
 # ──────────────────────────────────────────────────────────────
