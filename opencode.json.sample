@@ -12,6 +12,9 @@
         "qwen3-coder": {
           "name": "Qwen3 Coder"
         },
+        "smart-coder": {
+          "name": "Smart Coder (Local + Claude Fallback)"
+        },
         "claude-sonnet": {
           "name": "Claude Sonnet"
         }

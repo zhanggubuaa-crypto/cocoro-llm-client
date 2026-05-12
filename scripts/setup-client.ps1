@@ -37,7 +37,14 @@ Write-Host ""
 Write-Host "Step 2: opencode.json を生成しています..." -ForegroundColor Yellow
 
 $samplePath = Join-Path $PSScriptRoot "..\opencode.json.sample"
-$outputPath = Join-Path $PSScriptRoot "..\opencode.json"
+
+# グローバル設定ディレクトリ: %USERPROFILE%\.config\opencode\opencode.json
+$configDir = Join-Path $env:USERPROFILE ".config\opencode"
+if (-not (Test-Path $configDir)) {
+    New-Item -ItemType Directory -Path $configDir -Force | Out-Null
+    Write-Host "  設定ディレクトリを作成しました: $configDir" -ForegroundColor Cyan
+}
+$outputPath = Join-Path $configDir "opencode.json"
 
 if (-not (Test-Path $samplePath)) {
     Write-Host "  opencode.json.sample が見つかりません: $samplePath" -ForegroundColor Red
@@ -70,7 +77,7 @@ try {
 Write-Host ""
 Write-Host "=== セットアップ完了 ===" -ForegroundColor Cyan
 Write-Host "次のステップ:" -ForegroundColor Cyan
-Write-Host "  1. opencode.json の設定を確認する" -ForegroundColor White
+Write-Host "  1. 設定ファイルを確認する: $outputPath" -ForegroundColor White
 Write-Host "  2. opencode を起動する" -ForegroundColor White
 Write-Host ""
 Write-Host "接続先: http://${serverIp}:4000 (ローカルLLM)" -ForegroundColor Cyan

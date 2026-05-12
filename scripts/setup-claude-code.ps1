@@ -56,7 +56,7 @@ if ([string]::IsNullOrWhiteSpace($apiKey)) {
 # Step 4: ~/.claude/settings.json を生成・マージ
 # ──────────────────────────────────────────────────────────────
 Write-Host ""
-Write-Host "Step 4: Claude Code 設定ファイルを書き込んでいます..." -ForegroundColor Yellow
+Write-Host "Step 3: Claude Code 設定ファイルを書き込んでいます..." -ForegroundColor Yellow
 
 $claudeDir = Join-Path $env:USERPROFILE ".claude"
 $settingsPath = Join-Path $claudeDir "settings.json"
@@ -101,7 +101,7 @@ Set-Content -Path $settingsPath -Value $json -Encoding utf8 -NoNewline
 Write-Host "  設定ファイルを書き込みました: $settingsPath" -ForegroundColor Green
 
 # ──────────────────────────────────────────────────────────────
-# Step 5: サーバーへの接続確認
+# Step 4: サーバーへの接続確認
 # ──────────────────────────────────────────────────────────────
 Write-Host ""
 Write-Host "Step 4: サーバーへの接続を確認しています..." -ForegroundColor Yellow

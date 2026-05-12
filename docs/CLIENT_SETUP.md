@@ -60,7 +60,7 @@ LiteLLM APIキーを入力してください:
 API Key (LITELLM_MASTER_KEY): your-master-key-here
 ```
 
-設定は `%APPDATA%\opencode\config.json` に書き込まれます。  
+設定は `%USERPROFILE%\.config\opencode\opencode.json` に書き込まれます。  
 **OpenCode をどのフォルダで起動しても自動的にサーバーに繋がります。**
 
 ---
@@ -75,7 +75,7 @@ chmod +x scripts/setup-client.sh
 ./scripts/setup-client.sh
 ```
 
-設定は `~/.config/opencode/config.json` に書き込まれます。
+設定は `~/.config/opencode/opencode.json` に書き込まれます。
 
 ---
 
@@ -87,7 +87,7 @@ chmod +x scripts/setup-client.sh
 
 ```powershell
 # Windows
-New-Item -ItemType Directory -Path "$env:APPDATA\opencode" -Force
+New-Item -ItemType Directory -Path "$env:USERPROFILE\.config\opencode" -Force
 ```
 
 ```bash
@@ -99,14 +99,14 @@ mkdir -p ~/.config/opencode
 
 ```powershell
 # Windows
-Copy-Item opencode.json.sample "$env:APPDATA\opencode\config.json"
-notepad "$env:APPDATA\opencode\config.json"
+Copy-Item opencode.json.sample "$env:USERPROFILE\.config\opencode\opencode.json"
+notepad "$env:USERPROFILE\.config\opencode\opencode.json"
 ```
 
 ```bash
 # Linux / macOS
-cp opencode.json.sample ~/.config/opencode/config.json
-nano ~/.config/opencode/config.json
+cp opencode.json.sample ~/.config/opencode/opencode.json
+nano ~/.config/opencode/opencode.json
 ```
 
 ### 3. 設定ファイルの編集
@@ -214,13 +214,13 @@ APIキーが間違っています。サーバー管理者に正しい `LITELLM_M
 
 ```powershell
 # Windows — ファイルの存在確認
-Test-Path "$env:APPDATA\opencode\config.json"
-Get-Content "$env:APPDATA\opencode\config.json"
+Test-Path "$env:USERPROFILE\.config\opencode\opencode.json"
+Get-Content "$env:USERPROFILE\.config\opencode\opencode.json"
 ```
 
 ```bash
 # Linux / macOS
-cat ~/.config/opencode/config.json
+cat ~/.config/opencode/opencode.json
 ```
 
 ---
