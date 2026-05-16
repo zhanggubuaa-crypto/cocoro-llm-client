@@ -13,10 +13,24 @@
       },
       "models": {
         "qwen3-coder": {
-          "name": "Qwen3 Coder"
+          "name": "Qwen3.6 Coder (multimodal)",
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"]
+          }
         },
         "claude-sonnet": {
-          "name": "Claude Sonnet"
+          "name": "Claude Sonnet",
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"]
+          }
         }
       }
     }
@@ -32,7 +46,7 @@
         "write": false,
         "edit": false,
         "bash": false,
-        "webfetch": false
+        "webfetch": true
       }
     },
     "build": {
@@ -44,7 +58,7 @@
         "write": true,
         "edit": true,
         "bash": true,
-        "webfetch": false
+        "webfetch": true
       }
     }
   }
