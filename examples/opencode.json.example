@@ -13,7 +13,7 @@
       },
       "models": {
         "coco-local": {
-          "name": "Coco Local (vLLM, multimodal)",
+          "name": "coco-local",
           "attachment": true,
           "reasoning": true,
           "tool_call": true,
