@@ -115,7 +115,7 @@ chmod +x scripts/setup-claude-code.sh
 | モデル名 | 用途 |
 |---|---|
 | `smart-coder` | **推奨** — ローカル優先、失敗時は Claude へ自動切替 |
-| `qwen3-coder` | ローカルのみ・高速・256K コンテキスト |
+| `coco-local` | ローカルのみ・高速・128K コンテキスト（サーバー設定で変更可） |
 | `claude-sonnet` | 難しいタスク・品質最優先 |
 
 OpenCode は `opencode.json` の `model` を編集、Claude Code は `settings.json` の `model` または起動時に選択。
@@ -130,7 +130,7 @@ OpenCode は `opencode.json` の `model` を編集、Claude Code は `settings.j
 |---|---|
 | API Base URL | `http://<SERVER_IP>:4000/v1` |
 | API Key | `<LITELLM_MASTER_KEY の値>` |
-| Model | `qwen3-coder` / `smart-coder` / `claude-sonnet` |
+| Model | `coco-local` / `smart-coder` / `claude-sonnet` |
 
 > Claude Code だけは Anthropic API 形式なので、`:4001`（anthropic-proxy）経由になります。
 

@@ -89,7 +89,7 @@ grep LITELLM_MASTER_KEY ~/.cocoro-llm-server/.env
 curl http://<SERVER_IP>:4000/v1/chat/completions \
   -H "Authorization: Bearer YOUR_CORRECT_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model":"qwen3-coder","messages":[{"role":"user","content":"test"}]}'
+  -d '{"model":"coco-local","messages":[{"role":"user","content":"test"}]}'
 ```
 
 ---
@@ -174,7 +174,7 @@ ping <SERVER_IP>
 ```json
 {
   "error": {
-    "message": "The model qwen3-coder does not exist",
+    "message": "The model coco-local does not exist",
     "code": 404
   }
 }
@@ -202,7 +202,7 @@ docker compose logs vllm-primary
 
 ```json
 {
-  "model": "qwen3-coder"  // 正しいモデル名に変更
+  "model": "coco-local"  // サーバー側 SERVED_MODEL_NAME と一致するモデル名
 }
 ```
 

@@ -9,8 +9,8 @@
         "apiKey": "YOUR_API_KEY_HERE"
       },
       "models": {
-        "qwen3-coder": {
-          "name": "Qwen3.6 Coder (multimodal)",
+        "coco-local": {
+          "name": "Coco Local (vLLM, multimodal)",
           "attachment": true,
           "reasoning": true,
           "tool_call": true,
@@ -42,11 +42,11 @@
       }
     }
   },
-  "model": "litellm/qwen3-coder",
+  "model": "litellm/coco-local",
   "agent": {
     "chat": {
       "description": "設計・要約・相談用 (LiteLLM経由)",
-      "model": "litellm/qwen3-coder",
+      "model": "litellm/coco-local",
       "prompt": "You are a helpful assistant.",
       "tools": {
         "read": true,
@@ -58,7 +58,7 @@
     },
     "build": {
       "description": "実装・コーディング用 (LiteLLM経由)",
-      "model": "litellm/qwen3-coder",
+      "model": "litellm/coco-local",
       "prompt": "You are a coding assistant that writes and edits code.",
       "tools": {
         "read": true,

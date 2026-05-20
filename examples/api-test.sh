@@ -25,22 +25,22 @@ echo "2. List Models..." >&2
 models=$(curl -s "${BASE_URL}/models" | jq -r '.data[].id' 2>/dev/null || echo "Failed")
 echo "$models" >&2
 
-# 3. 推論テスト (Qwen3 Coder)
+# 3. 推論テスト (ローカルモデル直結)
 echo
-echo "3. Test Qwen3 Coder..." >&2
+echo "3. Test local model (coco-local)..." >&2
 response=$(curl -s -X POST "${BASE_URL}/chat/completions" \
     -H "Authorization: Bearer ${API_KEY}" \
     -H "Content-Type: application/json" \
     -d '{
-        "model": "qwen3-coder",
+        "model": "coco-local",
         "messages": [{"role": "user", "content": "Hello, world!"}],
         "max_tokens": 10
     }' 2>/dev/null || echo "Failed")
 
 if [[ "$response" == *"error"* ]]; then
-    echo "✗ Qwen3 Coder test failed: $response" >&2
+    echo "✗ Local model test failed: $response" >&2
 else
-    echo "✓ Qwen3 Coder test passed" >&2
+    echo "✓ Local model test passed" >&2
 fi
 
 # 4. 推論テスト (Claude Sonnet)
